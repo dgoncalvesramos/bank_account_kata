@@ -19,10 +19,10 @@ class AccountTest {
     {
         Account account = new Account();
         List<Operation> operations = new ArrayList<>();
-        LocalDateTime localDateTime = LocalDateTime.of(2017, Month.JUNE, 15, 13, 39,10,10);
         DateServiceProvider dateServiceProvider = new DateServiceProvider() ;
+        Instant localDateTime = dateServiceProvider.getDateTime();
 
-        account.makeDeposit(dateServiceProvider.getDateTimeFromDate(localDateTime).get(), amount);
+        account.makeDeposit(localDateTime, amount);
         operations.add(Deposit.makeDeposit(dateServiceProvider.getDateTimeFromDate(localDateTime).get(), amount));
 
         assertEquals(expectedBalance, account.getBalance());
@@ -37,13 +37,13 @@ class AccountTest {
     {
         Account account = new Account();
         List<Operation> operations = new ArrayList<>();
-        LocalDateTime localDateTime = LocalDateTime.of(2017, Month.JUNE, 15, 13, 39,10,10);
         DateServiceProvider dateServiceProvider = new DateServiceProvider() ;
+        Instant localDateTime = dateServiceProvider.getDateTime();
 
-        account.makeDeposit(dateServiceProvider.getDateTimeFromDate(localDateTime).get(), amount);
+        account.makeDeposit(localDateTime, amount);
         operations.add(Deposit.makeDeposit(dateServiceProvider.getDateTimeFromDate(localDateTime).get(), amount));
 
-        account.makeWithdrawal(dateServiceProvider.getDateTimeFromDate(localDateTime).get(), amount);
+        account.makeWithdrawal(localDateTime, amount);
         operations.add(Withdrawal.makeWithdrawal(dateServiceProvider.getDateTimeFromDate(localDateTime).get(), amount));
 
         assertEquals(expectedBalance, account.getBalance());
@@ -55,14 +55,14 @@ class AccountTest {
     void testWithdrawalWithNegativeBalance() throws Exception
     {
         Account account = new Account();
-        LocalDateTime localDateTime = LocalDateTime.of(2017, Month.JUNE, 15, 13, 39,10,10);
         DateServiceProvider dateServiceProvider = new DateServiceProvider() ;
+        Instant localDateTime = dateServiceProvider.getDateTime();
 
-        account.makeDeposit(dateServiceProvider.getDateTimeFromDate(localDateTime).get(),new BigDecimal(1000));
+        account.makeDeposit(localDateTime,new BigDecimal(1000));
 
         try
         {
-            account.makeWithdrawal(dateServiceProvider.getDateTimeFromDate(localDateTime).get(),new BigDecimal(2000));
+            account.makeWithdrawal(localDateTime,new BigDecimal(2000));
         } catch (Exception e)
         {
             assertEquals("Could not make withdrawal because of negative balance !", e.getMessage());
@@ -77,21 +77,21 @@ class AccountTest {
         Account account = new Account();
         List<Operation> operations = new ArrayList<>();
 
-        LocalDateTime localDateTime = LocalDateTime.of(2017, Month.JUNE, 15, 13, 39,10,10);
         DateServiceProvider dateServiceProvider = new DateServiceProvider() ;
+        Instant localDateTime = dateServiceProvider.getDateTime();
 
-        account.makeDeposit(dateServiceProvider.getDateTimeFromDate(localDateTime).get(),depositAmount);
+        account.makeDeposit(localDateTime,depositAmount);
         operations.add(Deposit.makeDeposit(dateServiceProvider.getDateTimeFromDate(localDateTime).get(), depositAmount));
 
-        account.makeWithdrawal(dateServiceProvider.getDateTimeFromDate(localDateTime).get(), withdrawalAmount);
+        account.makeWithdrawal(localDateTime, withdrawalAmount);
         operations.add(Withdrawal.makeWithdrawal(dateServiceProvider.getDateTimeFromDate(localDateTime).get(), withdrawalAmount));
 
         assertEquals(
                 "********* ACCOUNT HISTORY *********\n\n" +
                         "BALANCE " + expectedBalance + " $\n" +
                         "### LIST OF OPERATIONS ###\n\n" +
-                        "Deposit : 2017-06-15T13:39:10.000000010Z - amount : " + depositAmount + " $\n" +
-                        "Withdrawal : 2017-06-15T13:39:10.000000010Z - amount : " + withdrawalAmount + " $\n" +
+                        "Deposit : " + dateServiceProvider.getDateTimeFromDate(localDateTime).get() + " - amount : " + depositAmount + " $\n" +
+                        "Withdrawal : " + dateServiceProvider.getDateTimeFromDate(localDateTime).get() + " - amount : " + withdrawalAmount + " $\n" +
                         "**************************************"
                 ,
                     account.printHistory());

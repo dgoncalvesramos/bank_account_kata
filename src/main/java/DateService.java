@@ -15,9 +15,9 @@ public interface DateService {
      * @param date the LocalDateTime
      * @return an Optional object either null or feed with the date
      */
-    default Optional<Instant> getDateTimeFromDate(LocalDateTime date)
+    default Optional<Instant> getDateTimeFromDate(Instant date)
     {
-        return Optional.ofNullable(date.atZone(ZoneId.of("UTC")).toInstant());
+        return Optional.ofNullable(date);
     }
 
     /**
