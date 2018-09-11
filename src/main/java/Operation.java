@@ -4,8 +4,8 @@ import java.util.Objects;
 
 abstract class Operation
 {
-    protected Instant date ;
-    protected BigDecimal amount ;
+    Instant date ;
+    BigDecimal amount ;
 
     @Override
     public String toString()
@@ -28,10 +28,6 @@ abstract class Operation
     {
 
         return Objects.hash(date, amount);
-    }
-
-    public Instant getDate(){
-        return date;
     }
 
     public abstract BigDecimal applyOnBalance(BigDecimal balance);

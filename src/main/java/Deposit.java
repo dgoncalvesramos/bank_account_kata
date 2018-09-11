@@ -9,9 +9,9 @@ class Deposit extends Operation
         super.amount = amount;
     }
 
-    static Deposit makeDeposit(BigDecimal amount, Instant date)
+    static Deposit makeDeposit(Instant date, BigDecimal amount)
     {
-        return new Deposit(DateService.getDateTime(date),amount);
+        return new Deposit(date,amount);
     }
 
 

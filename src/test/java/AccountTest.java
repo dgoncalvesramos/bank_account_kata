@@ -15,15 +15,15 @@ class AccountTest {
     @ParameterizedTest
     @CsvSource({"1000,1000","2000,2000","4000,4000"})
 
-    void testDeposit(BigDecimal expectedBalance, BigDecimal amount)
+    void testDeposit(BigDecimal expectedBalance, BigDecimal amount) throws Exception
     {
         Account account = new Account();
         List<Operation> operations = new ArrayList<>();
-        LocalDateTime dateTime = LocalDateTime.of(2017, Month.JUNE, 15, 13, 39,10,10);
-        Instant instant = dateTime.atZone(ZoneId.of("UTC")).toInstant();
+        LocalDateTime localDateTime = LocalDateTime.of(2017, Month.JUNE, 15, 13, 39,10,10);
+        DateServiceProvider dateServiceProvider = new DateServiceProvider() ;
 
-        account.makeDeposit(amount, DateService.getDateTime(instant));
-        operations.add(Deposit.makeDeposit(amount,DateService.getDateTime(instant)));
+        account.makeDeposit(dateServiceProvider.getDateTimeFromDate(localDateTime).get(), amount);
+        operations.add(Deposit.makeDeposit(dateServiceProvider.getDateTimeFromDate(localDateTime).get(), amount));
 
         assertEquals(expectedBalance, account.getBalance());
         assertEquals(operations,account.getListOperations());
@@ -37,14 +37,14 @@ class AccountTest {
     {
         Account account = new Account();
         List<Operation> operations = new ArrayList<>();
-        LocalDateTime dateTime = LocalDateTime.of(2017, Month.JUNE, 15, 13, 39,10,10);
-        Instant instant = dateTime.atZone(ZoneId.of("UTC")).toInstant();
+        LocalDateTime localDateTime = LocalDateTime.of(2017, Month.JUNE, 15, 13, 39,10,10);
+        DateServiceProvider dateServiceProvider = new DateServiceProvider() ;
 
-        account.makeDeposit(amount,DateService.getDateTime(instant));
-        operations.add(Deposit.makeDeposit(amount,DateService.getDateTime(instant)));
+        account.makeDeposit(dateServiceProvider.getDateTimeFromDate(localDateTime).get(), amount);
+        operations.add(Deposit.makeDeposit(dateServiceProvider.getDateTimeFromDate(localDateTime).get(), amount));
 
-        account.makeWithdrawal(amount, DateService.getDateTime(instant));
-        operations.add(Withdrawal.makeWithdrawal(amount, DateService.getDateTime(instant)));
+        account.makeWithdrawal(dateServiceProvider.getDateTimeFromDate(localDateTime).get(), amount);
+        operations.add(Withdrawal.makeWithdrawal(dateServiceProvider.getDateTimeFromDate(localDateTime).get(), amount));
 
         assertEquals(expectedBalance, account.getBalance());
         assertEquals(operations,account.getListOperations());
@@ -52,17 +52,17 @@ class AccountTest {
 
     @DisplayName("Test the withdrawal function on an account with negative balance")
     @Test
-    void testWithdrawalWithNegativeBalance()
+    void testWithdrawalWithNegativeBalance() throws Exception
     {
         Account account = new Account();
-        LocalDateTime dateTime = LocalDateTime.of(2017, Month.JUNE, 15, 13, 39,10,10);
-        Instant instant = dateTime.atZone(ZoneId.of("UTC")).toInstant();
+        LocalDateTime localDateTime = LocalDateTime.of(2017, Month.JUNE, 15, 13, 39,10,10);
+        DateServiceProvider dateServiceProvider = new DateServiceProvider() ;
 
-        account.makeDeposit(new BigDecimal(1000), DateService.getDateTime(instant));
+        account.makeDeposit(dateServiceProvider.getDateTimeFromDate(localDateTime).get(),new BigDecimal(1000));
 
         try
         {
-            account.makeWithdrawal(new BigDecimal(2000), DateService.getDateTime(instant));
+            account.makeWithdrawal(dateServiceProvider.getDateTimeFromDate(localDateTime).get(),new BigDecimal(2000));
         } catch (Exception e)
         {
             assertEquals("Could not make withdrawal because of negative balance !", e.getMessage());
@@ -77,14 +77,14 @@ class AccountTest {
         Account account = new Account();
         List<Operation> operations = new ArrayList<>();
 
-        LocalDateTime dateTime = LocalDateTime.of(2017, Month.JUNE, 15, 13, 39,10,10);
-        Instant instant = dateTime.atZone(ZoneId.of("UTC")).toInstant();
+        LocalDateTime localDateTime = LocalDateTime.of(2017, Month.JUNE, 15, 13, 39,10,10);
+        DateServiceProvider dateServiceProvider = new DateServiceProvider() ;
 
-        account.makeDeposit(depositAmount,  DateService.getDateTime(instant));
-        operations.add(Deposit.makeDeposit(depositAmount,  DateService.getDateTime(instant)));
+        account.makeDeposit(dateServiceProvider.getDateTimeFromDate(localDateTime).get(),depositAmount);
+        operations.add(Deposit.makeDeposit(dateServiceProvider.getDateTimeFromDate(localDateTime).get(), depositAmount));
 
-        account.makeWithdrawal(withdrawalAmount,  DateService.getDateTime(instant));
-        operations.add(Withdrawal.makeWithdrawal(withdrawalAmount,  DateService.getDateTime(instant)));
+        account.makeWithdrawal(dateServiceProvider.getDateTimeFromDate(localDateTime).get(), withdrawalAmount);
+        operations.add(Withdrawal.makeWithdrawal(dateServiceProvider.getDateTimeFromDate(localDateTime).get(), withdrawalAmount));
 
         assertEquals(
                 "********* ACCOUNT HISTORY *********\n\n" +

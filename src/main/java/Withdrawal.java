@@ -9,9 +9,9 @@ class Withdrawal extends Operation
         super.amount = amount;
     }
 
-    static Withdrawal makeWithdrawal(BigDecimal amount, Instant date)
+    static Withdrawal makeWithdrawal(Instant date, BigDecimal amount)
     {
-        return new Withdrawal(DateService.getDateTime(date),amount);
+        return new Withdrawal(date, amount);
     }
 
     @Override

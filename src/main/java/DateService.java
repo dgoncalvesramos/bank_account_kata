@@ -1,9 +1,31 @@
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Optional;
 
-public class DateService {
+/**
+ * Date service interface 
+ * @author dgoncalves
+ *
+ */
+public interface DateService {
 
-    public static Instant getDateTime(Instant date)
+    /**
+     * Return a particular date (only used for junit tests)
+     * @param date the LocalDateTime
+     * @return an Optional object either null or feed with the date
+     */
+    default Optional<Instant> getDateTimeFromDate(LocalDateTime date)
     {
-        return date == null ?  Instant.now() : date;
+        return Optional.ofNullable(date.atZone(ZoneId.of("UTC")).toInstant());
+    }
+
+    /**
+     * Return the current time for an operation
+     * @return the current time
+     */
+    default Instant getDateTime()
+    {
+        return Instant.now();
     }
 }
