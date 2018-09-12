@@ -10,7 +10,7 @@ class Account
     public void makeDeposit(Instant date, BigDecimal amount) throws Exception
     {
         if(amount.compareTo(new BigDecimal(0)) <=0 || amount.compareTo(new BigDecimal(0)) == 0)
-            throw new Exception("Cannot make negative withdrawals !");
+            throw new Exception("Cannot make negative deposits !");
 
         listOperations.add(Deposit.makeDeposit(date, amount));
     }
