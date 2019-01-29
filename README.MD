@@ -6,7 +6,7 @@ A simple bank account implementation in java that allows a customer to open an a
 
 ## Running 
 
-Import the project on your IDE and run [Junit](https://junit.org/junit5/)
+Import the project on your IDE and run [Junit](https://junit.org/junit5/) tests. No main class implemented. Feel free to do it.<br>
 Project was built on [Intellij](https://www.jetbrains.com/idea/)
 
 ## Unit tests 
